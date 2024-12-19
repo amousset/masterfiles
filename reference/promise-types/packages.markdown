@@ -441,10 +441,28 @@ bundle agent example
   screen-4.1.0-0.19.20120314git3c2946.el7.x86_64
   ```
 
+* Supports [```options```][packages#options] attribute. Each space separate
+  option must be added as a separate list element. The options are passed
+  directly through to the package manager.
+* It is possible to use the [```options```][packages#options] attribute to pass
+  environment variables to the package manager with the ```env``` prefix. For
+  example, to set the ```EXTERNAL_URL``` environment variable:
+
+  ```cf3
+  bundle agent example_yum_pass_env_options
+  {
+    packages:
+        "gitlab-ce"
+          policy => "present",
+          options => { "env:EXTERNAL_URL=https://example.com" };
+  }
+  ```
+
 **History:**
 
 * Added in CFEngine 3.7.0
 * `enablerepo` and `disablerepo` option support added in 3.7.8, 3.10.4, 3.12.0
+* ```env``` prefix ```options``` in support added in 3.21.7, 3.24.2 and 3.25.0
 
 ### apt_get
 
@@ -478,10 +496,21 @@ packages:
 * Supports [```options```][packages#options] attribute. Each space separate
   option must be added as a separate list element. The options are passed
   directly through to the package manager.
+* It is possible to use the [```options```][packages#options] attribute to pass
+  environment variables to the package manager with the ```env``` prefix. For
+  example, to set the ```EXTERNAL_URL``` environment variable:
+
+  ```cf3
+  packages:
+      "gitlab-ce"
+        policy => "present",
+        options => { "env:EXTERNAL_URL=https://example.com" };
+  ```
 
 **History:**
 
 * Added in CFEngine 3.7.0
+* ```env``` prefix ```options``` in support added in 3.21.7, 3.24.2 and 3.25.0
 
 ### freebsd_ports
 
@@ -656,3 +685,57 @@ bundle agent main
 
 - version `latest` is *not* supported when promising an absence
 - `list-updates` is *not* implemented, snaps are automatically updated by default
+
+### zypper
+
+Manage packages using ```zypper```. This is the [default package module][lib/packages.cf#package_module_knowledge] for SLES, SLED and OpenSUSE.
+
+**Examples:**
+
+File based package source.
+
+```cf3
+packages:
+  sles|sled|opensuse::
+    "/mnt/nfs/packages/apache2-2.2.22.x86_64.rpm"
+      policy => "present";
+```
+
+Repository based package source with a specific version of the package.
+
+```cf3
+packages:
+  sles|sled|opensuse::
+    "apache2"
+      policy => "present",
+      version => "2.2.22";
+```
+
+**Notes:**
+
+* Supports file path and repository sourced packages.
+
+* Requires Python version 2 or 3 to be installed on the host.
+
+* Supports [```options```][packages#options] attribute. Each space separate
+  option must be added as a separate list element. The options are passed
+  directly through to the package manager.
+* It is possible to use the [```options```][packages#options] attribute to pass
+  environment variables to the package manager with the ```env``` prefix. For
+  example, to set the ```EXTERNAL_URL``` environment variable:
+
+  ```cf3
+  bundle agent example_yum_pass_env_options
+  {
+    packages:
+        "gitlab-ce"
+          policy => "present",
+          options => { "env:EXTERNAL_URL=https://example.com" };
+  }
+  ```
+
+**History:**
+
+* Added in CFEngine 3.11.0
+* ```env``` prefix ```options``` in support added in 3.21.7, 3.24.2 and 3.25.0
+
